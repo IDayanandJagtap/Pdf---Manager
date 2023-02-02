@@ -1,9 +1,12 @@
 const express = require("express");
+const fs = require("fs");
 const path = require("path");
 const multer = require("multer");   // Multer is a library that handles files for node js application
 // https://expressjs.com/en/resources/middleware/multer.html 
 
 const {mergePdfs, extractPdf} = require('./merger');
+const { fstat } = require("fs");
+const merge = require('easy-pdf-merge')
 
 const app = express()
 const port = 3000;
@@ -44,6 +47,8 @@ app.post('/merge', upload.array('pdfs', 2), async (req, res, next) => {
 
   res.redirect(`http://localhost:3000/static/${pdfName}.pdf`);
 });
+
+
 
 app.post('/extract', upload.array("pdfs", 1), async(req,res,next)=>{
   // console.log(req.body);
