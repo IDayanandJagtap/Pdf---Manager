@@ -6,7 +6,6 @@ const multer = require("multer");   // Multer is a library that handles files fo
 
 const {mergePdfs, extractPdf} = require('./merger');
 const { fstat } = require("fs");
-const merge = require('easy-pdf-merge')
 
 const app = express()
 const port = 3000;
@@ -38,6 +37,26 @@ app.get('/js/index.js',function(req,res){
   res.sendFile(path.join(__dirname + '/js/index.js')); 
 });
 
+// General functions ; 
+// Delete files after work is done.
+const deleteFiles = (pdfName) =>{
+  setTimeout(()=>{fs.unlink(`public/${pdfName}.pdf`, (err)=>{
+    if (err) throw err;
+  })}, 5000);
+
+  setTimeout(()=>{
+      fs.readdir("uploads", (err, files)=>{
+        if (err) throw err;
+
+        files.forEach( (file) =>{
+          fs.unlink("uploads/" + file, (err)=> {
+            if (err) throw err;
+          })
+        })
+      })
+  }, 5000);
+} 
+
 
 
 // Post requests
@@ -46,6 +65,7 @@ app.post('/merge', upload.array('pdfs', 2), async (req, res, next) => {
   let pdfName = await mergePdfs(path.join(__dirname, req.files[0].path), path.join(__dirname, req.files[1].path));
 
   res.redirect(`http://localhost:3000/static/${pdfName}.pdf`);
+  deleteFiles(pdfName);
 });
 
 
@@ -59,6 +79,7 @@ app.post('/extract', upload.array("pdfs", 1), async(req,res,next)=>{
   }
   else{
     res.redirect(`http://localhost:3000/static/${pdfName}.pdf`);
+    deleteFiles(pdfName);
   }
 })
 
