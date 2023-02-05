@@ -5,7 +5,9 @@ const multer = require("multer");   // Multer is a library that handles files fo
 // https://expressjs.com/en/resources/middleware/multer.html 
 
 const {mergePdfs, extractPdf} = require('./merger');
+const {imagesToPDF} = require('./imagesToPdf')
 const { fstat } = require("fs");
+const { file } = require("pdfkit");
 
 const app = express()
 const port = 3000;
@@ -29,6 +31,10 @@ app.get("/extract", (req, res, next) =>{
   res.render("extract", {error:false})
 })
 
+app.get("/image-pdf", (req,res)=>{
+  res.render("imagesTopdf")
+})
+
 
 
 
@@ -39,10 +45,10 @@ app.get('/js/index.js',function(req,res){
 
 // General functions ; 
 // Delete files after work is done.
-const deleteFiles = (pdfName) =>{
-  setTimeout(()=>{fs.unlink(`public/${pdfName}.pdf`, (err)=>{
+const deleteFiles = (pdfName, time) =>{
+  setTimeout(()=>{fs.unlink(`public/${pdfName}`, (err)=>{
     if (err) throw err;
-  })}, 5000);
+  })}, time);
 
   setTimeout(()=>{
       fs.readdir("uploads", (err, files)=>{
@@ -54,7 +60,7 @@ const deleteFiles = (pdfName) =>{
           })
         })
       })
-  }, 5000);
+  }, time);
 } 
 
 
@@ -65,7 +71,7 @@ app.post('/merge', upload.array('pdfs', 2), async (req, res, next) => {
   let pdfName = await mergePdfs(path.join(__dirname, req.files[0].path), path.join(__dirname, req.files[1].path));
 
   res.redirect(`http://localhost:3000/static/${pdfName}.pdf`);
-  deleteFiles(pdfName);
+  deleteFiles(pdfName, 5000);
 });
 
 
@@ -79,7 +85,29 @@ app.post('/extract', upload.array("pdfs", 1), async(req,res,next)=>{
   }
   else{
     res.redirect(`http://localhost:3000/static/${pdfName}.pdf`);
-    deleteFiles(pdfName);
+    deleteFiles(pdfName, 5000);
+  }
+})
+
+
+app.post("/image-pdf", upload.array("photos", 100), async(req, res)=>{
+  let list = [];
+  req.files.forEach( (file) =>{
+    list.push(file.path)
+  })
+
+  let pdfName = await imagesToPDF(list)
+  if(pdfName == undefined){
+    let err = {msg: "Oops something went wrong ! Please try again later !"};
+    res.render("imagesToPdf", {error:err})
+  }
+  else{
+    // To avoid the error : "Failed to load document"
+    setTimeout(()=>{
+      res.redirect(`http://localhost:3000/static/${pdfName}`);
+    }, 2000);
+
+    deleteFiles(pdfName, 10000);
   }
 })
 
