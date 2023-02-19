@@ -20,19 +20,19 @@ app.use('/static', express.static("public"));
 
 // Routes - Get
 app.get("/", (req, res, next)=>{
-  res.render('index')
+  res.render('index', {title: "Home - PDFr"})
 })
 
 app.get("/merge", (req, res, next)=>{
-  res.render("merge")
+  res.render("merge", {title: "Merge - PDFr"})
 })
 
 app.get("/extract", (req, res, next) =>{
-  res.render("extract", {error:false})
+  res.render("extract", {title: "Extract pages - PDFr", error:false})
 })
 
 app.get("/image-pdf", (req,res)=>{
-  res.render("imagesTopdf")
+  res.render("imagesTopdf", {title: "Images - PDFr"})
 })
 
 
