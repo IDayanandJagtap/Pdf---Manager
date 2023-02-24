@@ -42,6 +42,9 @@ app.get("/image-pdf", (req,res)=>{
 app.get('/js/index.js',function(req,res){
   res.sendFile(path.join(__dirname + '/js/index.js')); 
 });
+app.get('/js/active.js',function(req,res){
+  res.sendFile(path.join(__dirname + '/js/active.js')); 
+});
 
 // General functions ; 
 // Delete files after work is done.
@@ -70,7 +73,7 @@ app.post('/merge', upload.array('pdfs', 2), async (req, res, next) => {
   // req.files is array of `pdfs` files
   let pdfName = await mergePdfs(path.join(__dirname, req.files[0].path), path.join(__dirname, req.files[1].path));
 
-  res.redirect(`http://localhost:3000/static/${pdfName}.pdf`);
+  res.redirect(`http://localhost:3000/static/${pdfName}`);
   deleteFiles(pdfName, 5000);
 });
 
@@ -84,7 +87,7 @@ app.post('/extract', upload.array("pdfs", 1), async(req,res,next)=>{
     res.render("extract", {error:err});
   }
   else{
-    res.redirect(`http://localhost:3000/static/${pdfName}.pdf`);
+    res.redirect(`http://localhost:3000/static/${pdfName}`);
     deleteFiles(pdfName, 5000);
   }
 })
