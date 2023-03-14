@@ -1,16 +1,16 @@
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
+require('dotenv').config();
 const multer = require("multer");   // Multer is a library that handles files for node js application
 // https://expressjs.com/en/resources/middleware/multer.html 
 
 const {mergePdfs, extractPdf} = require('./merger');
-const {imagesToPDF} = require('./imagesToPdf')
-const { fstat } = require("fs");
-const { file } = require("pdfkit");
+const {imagesToPDF} = require('./imagesToPdf');
+const {docxToPdf, encryptPdf} = require('./iLovePdf');
 
 const app = express()
-const port = 3000;
+const port = process.env.PORT || 3000 ;
 const upload = multer({ dest: 'uploads/' })
 
 
@@ -33,6 +33,14 @@ app.get("/extract", (req, res, next) =>{
 
 app.get("/image-pdf", (req,res)=>{
   res.render("imagesTopdf", {title: "Images - PDFr"})
+})
+
+app.get("/docx-pdf", (req,res)=>{
+  res.render("docxToPdf", {title: "Docx to pdf - PDFr"})
+})
+
+app.get("/encrypt-pdf", (req,res)=>{
+  res.render("encryptPdf", {title: "Encrypt pdf - PDFr"})
 })
 
 
@@ -112,6 +120,34 @@ app.post("/image-pdf", upload.array("photos", 100), async(req, res)=>{
 
     deleteFiles(pdfName, 10000);
   }
+})
+
+
+app.post("/docx-pdf", upload.single("file"), async(req, res)=>{
+  // We have to pass the document but the multer library by default doesn't use extensions so the below code renames the file ... we could have used filter of multer instead but this is easy ig.
+  fs.rename(req.file.path, req.file.path+=".docx", (err)=>{console.log(err)});
+
+  let inputPath = path.join(__dirname, req.file.path) ;
+  const pdfName = new Date().getTime()  + ".pdf";
+
+  await docxToPdf(inputPath, pdfName);
+
+  res.redirect(`http://localhost:3000/static/${pdfName}`);
+  
+  deleteFiles(pdfName, 10000);
+})
+
+app.post("/encrypt-pdf", upload.single("file"), async(req, res)=>{
+  fs.rename(req.file.path, req.file.path+=".pdf", (err)=>{console.log(err)});
+
+  let password = req.body.password; 
+  let inputPath = path.join(__dirname, req.file.path);
+  const pdfName = new Date().getTime() + ".pdf";
+  await encryptPdf(inputPath, password, pdfName);
+
+  res.redirect(`http://localhost:3000/static/${pdfName}`);
+
+  // deleteFiles(pdfName, 10000);
 })
 
 
