@@ -14,8 +14,18 @@ document.getElementsByClassName("merge-pdf-cont")[0].addEventListener("click", (
   document.getElementsByClassName("encrypt-pdf-cont")[0].addEventListener("click", ()=>{
     location.href = "http://localhost:3000/encrypt-pdf"
   })
+  document.getElementsByClassName("compress-pdf-cont")[0].addEventListener("click", ()=>{
+    location.href = "http://localhost:3000/compress-pdf"
+  })
 
 
+
+
+
+
+  // Show on submit 
+  // const subBtn = document.getElementById("subBtn");
+  // subBtn.addEventListener("click", displayAlert("process-alert", "translate-y-[-12rem]"));
 
   
  

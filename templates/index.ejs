@@ -1,6 +1,12 @@
 <%-include("../templates/partials/head.ejs") %>
 
   <title> <%= title %> </title>
+  <style>
+    body {
+      background: url('/static/Images/img1.png') ;
+      background-size: cover;
+    }
+  </style>
 
   </head>
   <body>
@@ -20,41 +26,41 @@
           <div class="flex flex-wrap -m-4 justify-center items-center">
             <div class="p-4 lg:w-1/3 h-48 ">
               <div
-                class="h-full bg-sky-300 hover:bg-sky-400  px-8 pt-16 pb-24 rounded-lg overflow-hidden text-center relative cursor-pointer merge-pdf-cont">
+                class="h-full bg-sky-300 shadow-2xl hover:bg-sky-400 hover:scale-110 shadow-2xl px-8 pt-16 pb-24 rounded-lg overflow-hidden text-center relative cursor-pointer merge-pdf-cont">
                 <h1 class="title-font sm:text-2xl text-xl font-medium text-gray-900 mb-3">Merge pdfs</h1>
               </div>
             </div>
             <div class="p-4 lg:w-1/3 h-48 items-center">
               <div
-                class="h-full bg-sky-300 hover:bg-sky-400  px-8 pt-16 pb-24 rounded-lg overflow-hidden text-center relative cursor-pointer extract-pdf-cont">
+                class="h-full bg-sky-300 hover:bg-sky-400 hover:scale-110 shadow-2xl px-8 pt-16 pb-24 rounded-lg overflow-hidden text-center relative cursor-pointer extract-pdf-cont">
                 <h1 class="title-font sm:text-2xl text-xl font-medium text-gray-900 mb-3">Extract pages from pdf</h1>
               </div>
             </div>
             <div class="p-4 lg:w-1/3 h-48 items-center">
               <div
-                class="h-full bg-sky-300 hover:bg-sky-400  px-8 pt-16 pb-24 rounded-lg overflow-hidden text-center relative cursor-pointer img-pdf-cont">
+                class="h-full bg-sky-300 hover:bg-sky-400 hover:scale-110 shadow-2xl px-8 pt-16 pb-24 rounded-lg overflow-hidden text-center relative cursor-pointer img-pdf-cont">
                 <h1 class="title-font sm:text-2xl text-xl font-medium text-gray-900 mb-3">Images to pdf</h1>
               </div>
             </div>
           </div>
         </div>
-        <div class="container px-5 py-20 mx-auto">
+        <div class="container px-5  mx-auto">
           <div class="flex flex-wrap -m-4 justify-center items-center">
             <div class="p-4 lg:w-1/3 h-48 ">
               <div
-                class="h-full bg-sky-300 hover:bg-sky-400  px-8 pt-16 pb-24 rounded-lg overflow-hidden text-center relative cursor-pointer docx-pdf-cont">
+                class="h-full bg-sky-300 hover:bg-sky-400 hover:scale-110 shadow-2xl px-8 pt-16 pb-24 rounded-lg overflow-hidden text-center relative cursor-pointer docx-pdf-cont">
                 <h1 class="title-font sm:text-2xl text-xl font-medium text-gray-900 mb-3">Convert Docx to pdf</h1>
               </div>
             </div>
             <div class="p-4 lg:w-1/3 h-48 ">
               <div
-                class="h-full bg-sky-300 hover:bg-sky-400  px-8 pt-16 pb-24 rounded-lg overflow-hidden text-center relative cursor-pointer encrypt-pdf-cont">
+                class="h-full bg-sky-300 hover:bg-sky-400 hover:scale-110 shadow-2xl px-8 pt-16 pb-24 rounded-lg overflow-hidden text-center relative cursor-pointer encrypt-pdf-cont">
                 <h1 class="title-font sm:text-2xl text-xl font-medium text-gray-900 mb-3">Encrypt pdf</h1>
               </div>
             </div>
             <div class="p-4 lg:w-1/3 h-48 ">
               <div
-                class="h-full bg-sky-300 hover:bg-sky-400  px-8 pt-16 pb-24 rounded-lg overflow-hidden text-center relative cursor-pointer compress-pdf-cont">
+                class="h-full bg-sky-300 hover:bg-sky-400 hover:scale-110 shadow-2xl px-8 pt-16 pb-24 rounded-lg overflow-hidden text-center relative cursor-pointer compress-pdf-cont">
                 <h1 class="title-font sm:text-2xl text-xl font-medium text-gray-900 mb-3">Compress pdf</h1>
               </div>
             </div>

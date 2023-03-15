@@ -7,7 +7,7 @@ const multer = require("multer");   // Multer is a library that handles files fo
 
 const {mergePdfs, extractPdf} = require('./merger');
 const {imagesToPDF} = require('./imagesToPdf');
-const {docxToPdf, encryptPdf} = require('./iLovePdf');
+const {docxToPdf, encryptPdf, compressPdf} = require('./iLovePdf');
 
 const app = express()
 const port = process.env.PORT || 3000 ;
@@ -43,6 +43,9 @@ app.get("/encrypt-pdf", (req,res)=>{
   res.render("encryptPdf", {title: "Encrypt pdf - PDFr"})
 })
 
+app.get("/compress-pdf", (req, res)=>{
+  res.render("compressPdf", {title: "Compress pdf - PDFr"})
+})
 
 
 
@@ -52,6 +55,9 @@ app.get('/js/index.js',function(req,res){
 });
 app.get('/js/active.js',function(req,res){
   res.sendFile(path.join(__dirname + '/js/active.js')); 
+});
+app.get('/js/utils.js',function(req,res){
+  res.sendFile(path.join(__dirname + '/js/utils.js')); 
 });
 
 // General functions ; 
@@ -77,7 +83,7 @@ const deleteFiles = (pdfName, time) =>{
 
 
 // Post requests
-app.post('/merge', upload.array('pdfs', 2), async (req, res, next) => {
+app.post('/merge', upload.array('pdfs', 10), async (req, res, next) => {
   // req.files is array of `pdfs` files
   let pdfName = await mergePdfs(path.join(__dirname, req.files[0].path), path.join(__dirname, req.files[1].path));
 
@@ -96,6 +102,7 @@ app.post('/extract', upload.array("pdfs", 1), async(req,res,next)=>{
   }
   else{
     res.redirect(`http://localhost:3000/static/${pdfName}`);
+    // res.download(path.join(__dirname, `/public/${pdfName}`));
     deleteFiles(pdfName, 5000);
   }
 })
@@ -132,7 +139,8 @@ app.post("/docx-pdf", upload.single("file"), async(req, res)=>{
 
   await docxToPdf(inputPath, pdfName);
 
-  res.redirect(`http://localhost:3000/static/${pdfName}`);
+  // res.redirect(`http://localhost:3000/static/${pdfName}`);
+  res.download(path.join(__dirname, `/public/${pdfName}`));
   
   deleteFiles(pdfName, 10000);
 })
@@ -145,9 +153,23 @@ app.post("/encrypt-pdf", upload.single("file"), async(req, res)=>{
   const pdfName = new Date().getTime() + ".pdf";
   await encryptPdf(inputPath, password, pdfName);
 
-  res.redirect(`http://localhost:3000/static/${pdfName}`);
+  // res.redirect(`http://localhost:3000/static/${pdfName}`);
+  res.download(path.join(__dirname, `/public/${pdfName}`));
 
-  // deleteFiles(pdfName, 10000);
+  deleteFiles(pdfName, 10000);
+})
+
+app.post("/compress-pdf", upload.single("file"), async(req, res)=>{
+  fs.rename(req.file.path, req.file.path+=".pdf", (err)=>{console.log(err)});
+
+  let inputPath = path.join(__dirname, req.file.path);
+  const pdfName = new Date().getTime() + ".pdf";
+  await compressPdf(inputPath, pdfName);
+
+  // res.redirect(`http://localhost:3000/static/${pdfName}`);
+  res.download(path.join(__dirname, `/public/${pdfName}`));
+
+  deleteFiles(pdfName, 10000);
 })
 
 

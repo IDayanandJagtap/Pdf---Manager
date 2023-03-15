@@ -57,5 +57,30 @@ const encryptPdf = async(inputPath,password, pdfName) => {
 }
 
 
+const compressPdf = async(inputPath,pdfName) => {
+    try {
+        const task = instance.newTask('compress');
+      
+          await task.start();
+      
+          const file = new ILovePDFFile(inputPath);
+      
+          await task.addFile(file);
+      
+          await task.process();
+      
+          const data = await task.download();
+      
+          const outputPath = path.join(__dirname, `/public/${pdfName}`);
+      
+          fs.writeFileSync(outputPath, data);
+      
+          console.log(`PDF processed and saved to ${outputPath}`);
+        } catch (error) {
+          console.error(error);
+        }
+}
 
-module.exports = { docxToPdf, encryptPdf }
+
+
+module.exports = { docxToPdf, encryptPdf, compressPdf }

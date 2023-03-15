@@ -5,7 +5,12 @@
   </title>
 
   </head>
-
+  <style>
+    body {
+      background: url('/static/Images/img1.png') ;
+      background-size: cover;
+    }
+  </style>
   <body>
 
     <!-- Navbar -->
@@ -13,7 +18,7 @@
 
       <div class="container h-[80vh] w-screen m-0 flex justify-center items-center flex-col mx-auto">
 
-        <div class="flex flex-col justify-center w-1/2 bg-sky-300 rounded-lg p-4 py-8 ">
+        <div class="flex flex-col justify-center w-1/2 bg-sky-300 shadow-2xl rounded-lg p-4 py-8 ">
           <h1 class="text-center text-4xl py-4 mb-8">Convert Images to Pdf</h1>
           <form action="/image-pdf" method="POST" enctype="multipart/form-data"
             class="flex flex-col items-end w-4/5 mx-auto">
