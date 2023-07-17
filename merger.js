@@ -10,10 +10,10 @@ const mergePdfs = async(p1, p2) =>{
   await merger.add(p2);
 
   // Set current time as the name of pdf
-  let d = new Date().getTime();
+  let d = new Date().getTime() + ".pdf";
 
   //Save and reset internal document
-  await merger.save(`public/${d}.pdf`);
+  await merger.save(`public/${d}`);
 
   return d
 
@@ -26,10 +26,10 @@ const extractPdf = async(p1, pgno) =>{
     await merger.add(p1, pgno)
     
     // Set the current time as the name of the pdf 
-    let d = new Date().getTime();
+    let d = new Date().getTime() + ".pdf";
     
     // Save and reset the internal document
-    await merger.save(`public/${d}.pdf`)
+    await merger.save(`public/${d}`)
     
     return d
   }catch{
